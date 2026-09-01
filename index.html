@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadence Education AI Support</title>
+    <meta
+      name="description"
+      content="Connect with Cadence Education's AI-powered support — voice or chat, available 24/7."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📞</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://beta.ai.chatquartz.com" />
+    <link rel="dns-prefetch" href="https://beta.ai.chatquartz.com" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="nav">
+      <div class="nav__logo">
+        <img src="cadence-logo.png" alt="Cadence Education" class="nav__logo-img" />
+      </div>
+      <span class="nav__label">AI Support Center</span>
+    </nav>
+
+    <!-- BRAND STRIPE -->
+    <div class="brand-stripe"></div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero__content">
+        <h1 class="hero__heading">How can we help you today?</h1>
+        <p class="hero__sub">
+          Connect with Cadence Education's AI-powered support — speak with our AI assistant instantly, or use the chat button in the corner.
+        </p>
+        <div class="hero__actions">
+          <button id="call-btn" class="btn btn--primary">
+            <span class="btn__icon">📞</span>
+            <span id="call-btn-label">Click to Call</span>
+          </button>
+        </div>
+        <div class="status-pill">
+          <span class="status-pill__dot" id="status-dot"></span>
+          <span id="status-label">Ready to connect</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <span class="footer__copy">© Cadence Education. All Rights Reserved.</span>
+    </footer>
+
+    <script src="app.js"></script>
+
+    <!--
+      chatQuartz chatbot widget.
+      TODO: replace the `id` query param below with the Cadence Education
+      chatQuartz account ID, then uncomment this script tag.
+    -->
+    <!--
+    <script
+      id="chat-init"
+      src="https://beta.ai.chatquartz.com/account/js/init.js?id=YOUR_CHATQUARTZ_ACCOUNT_ID"
+    ></script>
+    -->
+  </body>
+</html>

@@ -1,0 +1,274 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Cadence Education brand palette (from cadence-education.com theme) */
+  --green: #006a39;
+  --green-dark: #004817;
+  --green-light: #028548;
+  --navy: #293a8c;
+  --sky: #7bb0e7;
+  --leaf: #83a846;
+  --dark: #222222;
+  --grey-bg: #f8f8f8;
+  --border: #e1e1e1;
+  --white: #ffffff;
+}
+
+body {
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--dark);
+  background: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── NAV ── */
+.nav {
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav__logo {
+  display: flex;
+  align-items: center;
+}
+
+.nav__logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.nav__label {
+  font-size: 12px;
+  color: #808080;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── BRAND STRIPE ── */
+.brand-stripe {
+  height: 5px;
+  background: linear-gradient(
+    to right,
+    var(--green-dark),
+    var(--green),
+    var(--green-light),
+    var(--leaf),
+    var(--sky),
+    var(--navy)
+  );
+}
+
+/* ── HERO ── */
+.hero {
+  background-color: var(--green-dark);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(6, 22, 14, 0.92) 0%,
+      rgba(0, 51, 28, 0.88) 100%
+    ),
+    url("https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1600&q=80")
+      center / cover no-repeat;
+  padding: 72px 32px;
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__content {
+  max-width: 620px;
+  text-align: center;
+}
+
+.hero__heading {
+  font-size: 48px;
+  color: var(--white);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.hero__sub {
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 40px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    opacity 0.2s,
+    transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background: var(--green-light);
+  color: var(--white);
+  box-shadow: 0 6px 22px rgba(2, 133, 72, 0.5);
+}
+.btn--primary:hover {
+  background: #039a54;
+}
+.btn--primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid var(--white);
+}
+.btn--outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn--danger {
+  background: #dc2626;
+  color: var(--white);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.38);
+}
+.btn--danger:hover {
+  background: #b91c1c;
+}
+
+.btn__icon {
+  font-size: 17px;
+}
+
+/* ── STATUS PILL ── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 11px;
+  color: var(--white);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(4px);
+}
+
+.status-pill__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #94a3b8;
+  transition: background 0.3s;
+}
+
+.status-pill__dot--connecting {
+  background: #fbbf24;
+}
+.status-pill__dot--active {
+  background: #4ade80;
+  animation: pulse 1.5s infinite;
+}
+.status-pill__dot--error {
+  background: #ef4444;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.footer__copy {
+  color: #999;
+}
+
+/* ── VAPI BUILT-IN BUTTON (hidden — we use our own) ── */
+.vapi-btn {
+  display: none !important;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .nav {
+    padding: 12px 18px;
+  }
+  .nav__logo-img {
+    height: 32px;
+  }
+  .nav__label {
+    font-size: 10px;
+  }
+  .hero {
+    padding: 48px 18px;
+  }
+  .hero__heading {
+    font-size: 28px;
+  }
+  .hero__actions {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .footer {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+}
