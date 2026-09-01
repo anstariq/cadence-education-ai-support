@@ -16,6 +16,7 @@
   --leaf: #83a846;
   --dark: #222222;
   --grey-bg: #f8f8f8;
+  --sage: #ecf2e1;
   --border: #e1e1e1;
   --white: #ffffff;
 }
@@ -31,7 +32,7 @@ body {
 
 /* ── NAV ── */
 .nav {
-  background: var(--white);
+  background: var(--sage);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -224,7 +225,7 @@ body {
 
 /* ── FOOTER ── */
 .footer {
-  background: var(--white);
+  background: var(--sage);
   border-top: 1px solid var(--border);
   padding: 14px 32px;
   display: flex;
