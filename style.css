@@ -32,18 +32,11 @@ body {
 /* ── NAV ── */
 .nav {
   background: var(--white);
-  padding: 14px 32px;
-  border-bottom: 1px solid var(--border);
-}
-
-/* Keeps the logo and label from drifting to the far edges on wide screens. */
-.nav__inner {
-  max-width: 1180px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--border);
 }
 
 .nav__logo {
@@ -52,7 +45,7 @@ body {
 }
 
 .nav__logo-img {
-  height: 56px;
+  height: 40px;
   width: auto;
   display: block;
 }
@@ -234,15 +227,10 @@ body {
   background: var(--white);
   border-top: 1px solid var(--border);
   padding: 14px 32px;
-  font-size: 11px;
-}
-
-.footer__inner {
-  max-width: 1180px;
-  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 11px;
 }
 
 .footer__copy {
@@ -260,7 +248,7 @@ body {
     padding: 12px 18px;
   }
   .nav__logo-img {
-    height: 36px;
+    height: 32px;
   }
   .nav__label {
     font-size: 10px;
@@ -278,7 +266,7 @@ body {
     width: 100%;
     justify-content: center;
   }
-  .footer__inner {
+  .footer {
     flex-direction: column;
     gap: 6px;
     text-align: center;
