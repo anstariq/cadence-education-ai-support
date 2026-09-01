@@ -19,17 +19,16 @@ Palette lifted from cadence-education.com (Enfold theme variables):
 Typeface: **Lato** (same as the live site), loaded from Google Fonts.
 Logo: `cadence-logo.png`, taken from the live site's header.
 
-## Setup — remaining TODOs
+## Configuration
 
-1. **Voice agent.** Open `app.js` and replace `ASSISTANT_ID` with the Cadence
-   Vapi assistant ID (Vapi dashboard → Assistants → select → copy ID).
-   `PUBLIC_KEY` is the shared account-level key and does not need changing.
-   Until `ASSISTANT_ID` is replaced, the call button renders disabled with an
-   "Assistant not configured" status instead of erroring.
+**Voice agent — done.** `ASSISTANT_ID` in `app.js` points at the Cadence
+assistant, and `PUBLIC_KEY` is the account-level key for the same Vapi org, so
+the two are a valid pair. Nothing further is required.
 
-2. **Chatbot.** Open `index.html`, find the commented-out chatQuartz block near
-   the bottom, replace `YOUR_CHATQUARTZ_ACCOUNT_ID` with the Cadence account ID,
-   and uncomment the `<script>` tag.
+**Chatbot — outstanding.** The chatQuartz `<script>` at the bottom of
+`index.html` still uses Edmentum's account ID (`13202997`) as a placeholder.
+Replace it with the Cadence chatQuartz account ID. Note the widget's colours and
+greeting come from that account's own dashboard settings, not from this repo.
 
 ## Local development
 

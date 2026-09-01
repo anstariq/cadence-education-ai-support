@@ -1,10 +1,8 @@
 // ── Config ──────────────────────────────────────────────────────────────────
 // PUBLIC_KEY is the account-level Vapi public key (Vapi dashboard → Account → API Keys).
 // ASSISTANT_ID is per-assistant (Vapi dashboard → Assistants → select → copy ID).
-// TEMPORARY: this is Edmentum's assistant, wired up only so the page can be
-// previewed end-to-end. TODO: swap for the Cadence Education assistant.
 var PUBLIC_KEY = "07a2396d-9738-4838-af99-f6a18d946f0b";
-var ASSISTANT_ID = "e9e14ea9-ea36-4877-bc6a-ba3cf94ebd3e";
+var ASSISTANT_ID = "de6eb7dd-cb3c-47b0-85cb-41d504fbdf95";
 // ────────────────────────────────────────────────────────────────────────────
 
 var configured = ASSISTANT_ID.indexOf("REPLACE_WITH") !== 0;
