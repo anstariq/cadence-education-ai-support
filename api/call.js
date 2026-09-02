@@ -41,6 +41,23 @@ function toE164(raw) {
   return null;
 }
 
+// Tells the visitor what is actually wrong. The most common mistake is an
+// international number typed without its + and country code, which is
+// indistinguishable from a mistyped US number unless we say so.
+function numberError(raw) {
+  var trimmed = typeof raw === "string" ? raw.trim() : "";
+  var digits = trimmed.replace(/[^\d]/g, "");
+
+  if (!digits) return "Enter your phone number so we can call you back.";
+  if (trimmed.charAt(0) === "+") {
+    return "That country code and number don't look right. Check the digits after the +.";
+  }
+  if (digits.length > 11) {
+    return "For numbers outside the US, start with + and your country code — e.g. +44 7700 900123.";
+  }
+  return "Enter a valid 10-digit US number, including area code.";
+}
+
 function sameOrigin(req) {
   var host = req.headers.host;
   var origin = req.headers.origin || req.headers.referer;
@@ -91,11 +108,10 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  var number = toE164((body || {}).number);
+  var raw = (body || {}).number;
+  var number = toE164(raw);
   if (!number) {
-    return res
-      .status(400)
-      .json({ error: "Enter a valid phone number, including area code." });
+    return res.status(400).json({ error: numberError(raw) });
   }
 
   try {

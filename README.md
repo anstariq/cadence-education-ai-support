@@ -36,6 +36,22 @@ browser --POST /api/call--> api/call.js --POST api.vapi.ai/call--> Vapi --rings-
 applies a best-effort per-IP rate limit, and returns a generic error to the page
 while logging provider detail server-side.
 
+### Accepted number formats
+
+Punctuation is stripped before validation, so all of these are equivalent:
+
+```
+(555) 123-4567     555 123 4567     555-123-4567
+5551234567         1-555-123-4567
+```
+
+Bare 10-digit and 11-digit numbers are assumed US/Canada. **Anything outside
+the US must be entered with a leading `+` and country code** (`+44 7700
+900123`) — a bare `447700900123` is rejected, because it is indistinguishable
+from a mistyped US number. The page states this under the form, and the
+validation messages name the specific problem rather than repeating one generic
+line. Client and server messages are kept identical.
+
 ### Environment variables
 
 Set in Vercel (Project → Settings → Environment Variables). **Never commit

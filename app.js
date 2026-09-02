@@ -71,13 +71,27 @@ function setFailed(message) {
   }, RESET_DELAY_MS);
 }
 
-// Mirrors the server's normalisation so obvious mistakes are caught before a
-// round trip. The server validates again — this is convenience, not security.
-function looksLikeAValidNumber(raw) {
+// Mirrors the server's rules so obvious mistakes are caught before a round
+// trip. The server validates again — this is convenience, not security.
+// Punctuation is stripped, so dashes, spaces and brackets are all accepted.
+// Returns null when the number is usable, otherwise the message to show.
+function validateNumber(raw) {
   var trimmed = raw.trim();
   var digits = trimmed.replace(/[^\d]/g, "");
-  if (trimmed.charAt(0) === "+") return digits.length >= 8 && digits.length <= 15;
-  return digits.length === 10 || (digits.length === 11 && digits.charAt(0) === "1");
+
+  if (!digits) return "Enter your phone number so we can call you back.";
+
+  if (trimmed.charAt(0) === "+") {
+    return digits.length >= 8 && digits.length <= 15
+      ? null
+      : "That country code and number don't look right. Check the digits after the +.";
+  }
+  if (digits.length === 10) return null;
+  if (digits.length === 11 && digits.charAt(0) === "1") return null;
+  if (digits.length > 11) {
+    return "For numbers outside the US, start with + and your country code — e.g. +44 7700 900123.";
+  }
+  return "Enter a valid 10-digit US number, including area code.";
 }
 
 form.addEventListener("submit", async function (event) {
@@ -86,8 +100,9 @@ form.addEventListener("submit", async function (event) {
   if (resetTimer) clearTimeout(resetTimer);
 
   var number = phoneInput.value;
-  if (!looksLikeAValidNumber(number)) {
-    showError("Enter a valid phone number, including area code.");
+  var problem = validateNumber(number);
+  if (problem) {
+    showError(problem);
     phoneInput.focus();
     return;
   }

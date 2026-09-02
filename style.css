@@ -150,7 +150,18 @@ body {
   color: #fecaca;
   font-size: 13px;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+}
+
+.hero__hint {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.hero__hint strong {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .sr-only {
