@@ -79,6 +79,40 @@ resets after a few seconds; it cannot show live call state or an "End call"
 control. Adding that would mean polling `GET /call/{id}` through a second
 endpoint.
 
+## Access gate
+
+`middleware.js` is Vercel Edge Middleware that runs before any file is served,
+so `index.html`, `app.js` and the demo itself never reach an unauthenticated
+visitor. A client-side check could not do this — the files would already be on
+their machine by the time it ran. It also covers `/api/call`, so the
+outbound-calling endpoint can no longer be hit anonymously.
+
+The session is a stateless `<expiry>.<hmac(expiry)>` token in an
+`HttpOnly; Secure; SameSite=Lax` cookie (`cadence_session`), valid for one week.
+There is no session store. Changing `AUTH_SECRET` revokes every active session.
+
+`/login`, `/login.html`, `/style.css` and `/cadence-logo.png` are the only
+unauthenticated paths — exactly what the sign-in screen needs to render.
+`/logout` clears the cookie.
+
+### Credentials
+
+This is modelled on the `dataquartz-demos` gate, with one deliberate
+difference: **there are no hardcoded credential defaults.** That project is not
+a git repository, so its inline defaults never left the machine. This
+repository is public on GitHub, where a committed password or signing secret
+would be readable by anyone — revealing the password and allowing session
+cookies to be forged. All three values must come from the environment:
+
+| Variable | Meaning |
+| --- | --- |
+| `AUTH_USER` | Sign-in username |
+| `AUTH_PASSWORD` | Sign-in password |
+| `AUTH_SECRET` | HMAC key for the session cookie; never sent to the browser |
+
+If any is missing the gate fails closed with a 503 naming what to set, rather
+than serving the demo unprotected.
+
 ## Chatbot — outstanding
 
 The chatQuartz `<script>` at the bottom of `index.html` still uses Edmentum's
