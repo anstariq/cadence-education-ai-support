@@ -39,14 +39,25 @@
       <div class="hero__content">
         <h1 class="hero__heading">How can we help you today?</h1>
         <p class="hero__sub">
-          Connect with Cadence Education's AI-powered support — speak with our AI assistant instantly, or use the chat button in the corner.
+          Connect with Cadence Education's AI-powered support — enter your number and our AI assistant will call you straight back, or use the chat button in the corner.
         </p>
-        <div class="hero__actions">
-          <button id="call-btn" class="btn btn--primary">
+        <form id="call-form" class="hero__actions" novalidate>
+          <label class="sr-only" for="phone">Your phone number</label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            class="field"
+            placeholder="(555) 123-4567"
+            autocomplete="tel"
+            inputmode="tel"
+          />
+          <button id="call-btn" type="submit" class="btn btn--primary">
             <span class="btn__icon">📞</span>
-            <span id="call-btn-label">Click to Call</span>
+            <span id="call-btn-label">Call Me</span>
           </button>
-        </div>
+        </form>
+        <p id="call-error" class="hero__error" role="alert" hidden></p>
         <div class="status-pill">
           <span class="status-pill__dot" id="status-dot"></span>
           <span id="status-label">Ready to connect</span>

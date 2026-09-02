@@ -19,16 +19,56 @@ Palette lifted from cadence-education.com (Enfold theme variables):
 Typeface: **Lato** (same as the live site), loaded from Google Fonts.
 Logo: `cadence-logo.png`, taken from the live site's header.
 
-## Configuration
+## How the voice agent works
 
-**Voice agent — done.** `ASSISTANT_ID` in `app.js` points at the Cadence
-assistant, and `PUBLIC_KEY` is the account-level key for the same Vapi org, so
-the two are a valid pair. Nothing further is required.
+The button places an **outbound phone call**: the visitor enters their number,
+and Vapi rings them. This replaced the original in-browser web call because
+Vapi does not support call transfer on web calls, only on phone calls.
 
-**Chatbot — outstanding.** The chatQuartz `<script>` at the bottom of
-`index.html` still uses Edmentum's account ID (`13202997`) as a placeholder.
-Replace it with the Cadence chatQuartz account ID. Note the widget's colours and
-greeting come from that account's own dashboard settings, not from this repo.
+Outbound calls require Vapi's *private* key, which must never reach the
+browser, so the request goes through a serverless function:
+
+```
+browser --POST /api/call--> api/call.js --POST api.vapi.ai/call--> Vapi --rings--> visitor
+```
+
+`api/call.js` normalises the number to E.164, rejects cross-origin requests,
+applies a best-effort per-IP rate limit, and returns a generic error to the page
+while logging provider detail server-side.
+
+### Environment variables
+
+Set in Vercel (Project → Settings → Environment Variables). **Never commit
+these.**
+
+| Variable | Meaning |
+| --- | --- |
+| `VAPI_PRIVATE_KEY` | Vapi private API key |
+| `VAPI_PHONE_NUMBER_ID` | Vapi number used as outbound caller ID |
+| `VAPI_ASSISTANT_ID` | The Cadence assistant |
+
+If any is missing the endpoint returns 500 and the page shows a failure state,
+rather than half-working.
+
+### Transfer
+
+Call transfer is configured on the assistant in the Vapi dashboard (a
+`transferCall` tool with its destination). Nothing in this repo controls it.
+
+## Known limitation
+
+Because the conversation happens on the visitor's phone, the browser receives no
+call lifecycle events. The status pill therefore shows "Calling you now" and
+resets after a few seconds; it cannot show live call state or an "End call"
+control. Adding that would mean polling `GET /call/{id}` through a second
+endpoint.
+
+## Chatbot — outstanding
+
+The chatQuartz `<script>` at the bottom of `index.html` still uses Edmentum's
+account ID (`13202997`) as a placeholder. Replace it with the Cadence
+chatQuartz account ID. The widget's colours and greeting come from that
+account's own dashboard settings, not from this repo.
 
 ## Local development
 
@@ -40,8 +80,10 @@ Then open http://localhost:3000
 
 ## Deploy
 
-Static site on Vercel — no build step (`vercel.json` sets `outputDirectory: "."`).
+Vercel — static files plus the `api/` serverless function.
 
 ```
 vercel --prod
 ```
+
+Pushes to `main` auto-deploy via the GitHub integration.
