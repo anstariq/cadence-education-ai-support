@@ -21,63 +21,53 @@ Logo: `cadence-logo.png`, taken from the live site's header.
 
 ## How the voice agent works
 
-The button places an **outbound phone call**: the visitor enters their number,
-and Vapi rings them. This replaced the original in-browser web call because
-Vapi does not support call transfer on web calls, only on phone calls.
+The button starts an **in-browser web call** via the Vapi web SDK. `PUBLIC_KEY`
+and `ASSISTANT_ID` sit at the top of `app.js`; both are client-side values by
+design, and the page is behind the access gate in any case.
 
-Outbound calls require Vapi's *private* key, which must never reach the
-browser, so the request goes through a serverless function:
+Vapi's own floating button is hidden (`.vapi-btn { display: none }`) so the
+hero's "Click to Call" drives the call instead. The status pill tracks
+`call-start`, `call-end` and `error`.
 
-```
-browser --POST /api/call--> api/call.js --POST api.vapi.ai/call--> Vapi --rings--> visitor
-```
+The assistant is **agent A** (`add0f8a4…`), which collects a callback number
+and hands off to a phone call — see below.
 
-`api/call.js` normalises the number to E.164, rejects cross-origin requests,
-applies a best-effort per-IP rate limit, and returns a generic error to the page
-while logging provider detail server-side.
+## Callback to a phone call
 
-### Accepted number formats
+Vapi supports call transfer on phone calls but not on web calls. To keep the
+one-click web call while still allowing transfer, the web agent collects a
+callback number during the conversation and hands off to a phone call.
 
-Punctuation is stripped before validation, so all of these are equivalent:
+**All of this lives in Vapi, not in this repo.** Agent A
+(`add0f8a4…`, "Cadence Academy Agent A") has two tools attached:
 
-```
-(555) 123-4567     555 123 4567     555-123-4567
-5551234567         1-555-123-4567
-```
+| Tool | Type | Role |
+| --- | --- | --- |
+| `continue_on_phone_copy` | `code` | Takes `phoneNumber` and places the outbound PSTN call |
+| `end_web_call_after_phone_handoff` | `endCall` | Ends the web call once the handoff succeeds |
 
-Bare 10-digit and 11-digit numbers are assumed US/Canada. **Anything outside
-the US must be entered with a leading `+` and country code** (`+44 7700
-900123`) — a bare `447700900123` is rejected, because it is indistinguishable
-from a mistyped US number. The page states this under the form, and the
-validation messages name the specific problem rather than repeating one generic
-line. Client and server messages are kept identical.
+Because `continue_on_phone_copy` is a Vapi-hosted `code` tool, Vapi places the
+call itself. There is no webhook, no serverless function and no shared secret
+on our side — the assistant has no `server.url` set, by design.
 
-### Environment variables
+### Two earlier approaches, both in git history
 
-Set in Vercel (Project → Settings → Environment Variables). **Never commit
-these.**
+Neither is in the working tree; both were superseded by the Vapi-hosted tool.
 
-| Variable | Meaning |
-| --- | --- |
-| `VAPI_PRIVATE_KEY` | Vapi private API key |
-| `VAPI_PHONE_NUMBER_ID` | Vapi number used as outbound caller ID |
-| `VAPI_ASSISTANT_ID` | The Cadence assistant |
+- **Visitor types their number** (commit `0a65363`) — an `api/call.js`
+  serverless function placed the outbound call directly. A typed number is more
+  accurate than a spoken one, but it replaced the one-click call with a form,
+  and was reverted at the client's request.
+- **Webhook capture** — an `/api/vapi-events` endpoint took the number from a
+  `save_callback_number` tool and placed the call on the `end-of-call-report`
+  webhook. It required exempting its path from the access gate, which the
+  current design avoids entirely.
 
-If any is missing the endpoint returns 500 and the page shows a failure state,
-rather than half-working.
+### Known limitation
 
-### Transfer
-
-Call transfer is configured on the assistant in the Vapi dashboard (a
-`transferCall` tool with its destination). Nothing in this repo controls it.
-
-## Known limitation
-
-Because the conversation happens on the visitor's phone, the browser receives no
-call lifecycle events. The status pill therefore shows "Calling you now" and
-resets after a few seconds; it cannot show live call state or an "End call"
-control. Adding that would mean polling `GET /call/{id}` through a second
-endpoint.
+Spoken digits are the weak point — ASR mangles phone numbers and web calls have
+no DTMF fallback. Agent A's prompt should read the number back for confirmation
+before handing off.
 
 ## Access gate
 

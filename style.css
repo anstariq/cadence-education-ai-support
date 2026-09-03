@@ -113,57 +113,10 @@ body {
 
 .hero__actions {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 16px;
-}
-
-/* ── PHONE FIELD ── */
-.field {
-  flex: 1 1 240px;
-  max-width: 280px;
-  padding: 16px 18px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.95);
-  font-family: inherit;
-  font-size: 16px;
-  color: var(--dark);
-}
-
-.field::placeholder {
-  color: #8a8a8a;
-}
-
-.field:focus {
-  outline: 2px solid var(--green-light);
-  outline-offset: 2px;
-  background: var(--white);
-}
-
-.field:disabled {
-  opacity: 0.6;
-}
-
-.hero__error {
-  color: #fecaca;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  margin-bottom: 24px;
 }
 
 /* ── BUTTONS ── */
@@ -285,6 +238,11 @@ body {
   color: #999;
 }
 
+/* ── VAPI BUILT-IN BUTTON (hidden — we use our own) ── */
+.vapi-btn {
+  display: none !important;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
   .nav {
@@ -304,10 +262,6 @@ body {
   }
   .hero__actions {
     flex-direction: column;
-  }
-  .field {
-    max-width: none;
-    width: 100%;
   }
   .btn {
     width: 100%;

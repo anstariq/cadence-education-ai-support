@@ -19,8 +19,8 @@
    If any is missing the gate fails closed with a 503 explaining what to set,
    rather than silently letting requests through.
 
-   As a side effect this also protects /api/call, so the outbound-calling
-   endpoint can no longer be hit by anonymous visitors.
+   As a side effect this also protects any future /api routes, which cannot be
+   reached by anonymous visitors.
 
    No `config` export — Vercel runs this on every request by default, which is
    what we want. Paths in PUBLIC below are the only ones let through.

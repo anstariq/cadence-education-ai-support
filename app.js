@@ -1,22 +1,20 @@
-// The call button posts to /api/call, which places an outbound Vapi phone call
-// to the number the visitor entered. Outbound calls need Vapi's private key, so
-// the request has to go through the serverless function rather than the browser.
-//
-// Note: unlike the previous web-call setup, the browser gets no call lifecycle
-// events here — once Vapi accepts the request, the conversation happens
-// entirely on the visitor's phone.
+// ── Config ──────────────────────────────────────────────────────────────────
+// PUBLIC_KEY is the account-level Vapi public key (Vapi dashboard → Account → API Keys).
+// ASSISTANT_ID is per-assistant (Vapi dashboard → Assistants → select → copy ID).
+var PUBLIC_KEY = "07a2396d-9738-4838-af99-f6a18d946f0b";
+var ASSISTANT_ID = "add0f8a4-43df-4ad5-b56c-ce207dcfa925";
+// ────────────────────────────────────────────────────────────────────────────
 
-var form = document.getElementById("call-form");
-var phoneInput = document.getElementById("phone");
+var configured = ASSISTANT_ID.indexOf("REPLACE_WITH") !== 0;
+
 var callBtn = document.getElementById("call-btn");
 var btnLabel = document.getElementById("call-btn-label");
 var btnIcon = callBtn.querySelector(".btn__icon");
 var statusDot = document.getElementById("status-dot");
 var statusLbl = document.getElementById("status-label");
-var errorEl = document.getElementById("call-error");
 
-var RESET_DELAY_MS = 8000;
-var resetTimer = null;
+var calling = false;
+var vapi = null;
 
 function setStatus(modifier, label) {
   statusDot.className = "status-pill__dot";
@@ -24,109 +22,113 @@ function setStatus(modifier, label) {
   statusLbl.textContent = label;
 }
 
-function showError(message) {
-  errorEl.textContent = message;
-  errorEl.hidden = false;
-}
-
-function clearError() {
-  errorEl.textContent = "";
-  errorEl.hidden = true;
-}
-
 function setIdle() {
+  calling = false;
+  callBtn.className = "btn btn--primary";
   callBtn.disabled = false;
-  phoneInput.disabled = false;
-  btnLabel.textContent = "Call Me";
+  btnLabel.textContent = "Click to Call";
   btnIcon.textContent = "📞";
   setStatus("", "Ready to connect");
 }
 
-function setRequesting() {
+function setConnecting() {
+  calling = true;
   callBtn.disabled = true;
-  phoneInput.disabled = true;
-  btnLabel.textContent = "Calling…";
+  btnLabel.textContent = "Connecting…";
   btnIcon.textContent = "⏳";
-  setStatus("connecting", "Requesting your call…");
+  setStatus("connecting", "Connecting…");
 }
 
-function setPlaced() {
-  callBtn.disabled = true;
-  phoneInput.disabled = true;
-  btnLabel.textContent = "Call on its way";
-  btnIcon.textContent = "✅";
-  setStatus("active", "Calling you now — please pick up");
-  resetTimer = setTimeout(setIdle, RESET_DELAY_MS);
-}
-
-function setFailed(message) {
+function setActive() {
+  calling = true;
+  callBtn.className = "btn btn--danger";
   callBtn.disabled = false;
-  phoneInput.disabled = false;
-  btnLabel.textContent = "Call Me";
+  btnLabel.textContent = "End Call";
+  btnIcon.textContent = "🔴";
+  setStatus("active", "On a call");
+}
+
+function setError() {
+  calling = false;
+  callBtn.disabled = true;
+  setStatus("error", "Connection failed");
+  setTimeout(setIdle, 3000);
+}
+
+function setUnconfigured() {
+  calling = false;
+  callBtn.disabled = true;
+  btnLabel.textContent = "Click to Call";
   btnIcon.textContent = "📞";
-  setStatus("error", "Could not connect");
-  showError(message);
-  resetTimer = setTimeout(function () {
-    setStatus("", "Ready to connect");
-  }, RESET_DELAY_MS);
+  setStatus("error", "Assistant not configured");
 }
 
-// Mirrors the server's rules so obvious mistakes are caught before a round
-// trip. The server validates again — this is convenience, not security.
-// Punctuation is stripped, so dashes, spaces and brackets are all accepted.
-// Returns null when the number is usable, otherwise the message to show.
-function validateNumber(raw) {
-  var trimmed = raw.trim();
-  var digits = trimmed.replace(/[^\d]/g, "");
-
-  if (!digits) return "Enter your phone number so we can call you back.";
-
-  if (trimmed.charAt(0) === "+") {
-    return digits.length >= 8 && digits.length <= 15
-      ? null
-      : "That country code and number don't look right. Check the digits after the +.";
-  }
-  if (digits.length === 10) return null;
-  if (digits.length === 11 && digits.charAt(0) === "1") return null;
-  if (digits.length > 11) {
-    return "For numbers outside the US, start with + and your country code — e.g. +44 7700 900123.";
-  }
-  return "Enter a valid 10-digit US number, including area code.";
-}
-
-form.addEventListener("submit", async function (event) {
-  event.preventDefault();
-  clearError();
-  if (resetTimer) clearTimeout(resetTimer);
-
-  var number = phoneInput.value;
-  var problem = validateNumber(number);
-  if (problem) {
-    showError(problem);
-    phoneInput.focus();
-    return;
-  }
-
-  setRequesting();
-
-  try {
-    var res = await fetch("/api/call", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ number: number }),
-    });
-    var data = await res.json().catch(function () {
-      return {};
-    });
-
-    if (!res.ok) {
-      setFailed(data.error || "Could not place the call. Please try again.");
-      return;
+function setupButton() {
+  callBtn.addEventListener("click", function () {
+    if (calling) {
+      vapi.stop();
+    } else {
+      setConnecting();
+      vapi.start(ASSISTANT_ID);
     }
-    setPlaced();
-  } catch (err) {
-    setFailed("Network error. Please check your connection and try again.");
-  }
-});
+  });
+}
 
-phoneInput.addEventListener("input", clearError);
+if (!configured) {
+  // No assistant wired up yet — keep the page intact but disable the call button.
+  console.warn(
+    "[Cadence AI Support] ASSISTANT_ID is still a placeholder. Set it in app.js to enable voice calls."
+  );
+  setUnconfigured();
+} else {
+  // Load Vapi via the official html-script-tag CDN loader
+  (function (d, t) {
+    var g = d.createElement(t);
+    var s = d.getElementsByTagName(t)[0];
+    g.src =
+      "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+    g.defer = true;
+    g.async = true;
+    s.parentNode.insertBefore(g, s);
+
+    g.onload = function () {
+      vapi = window.vapiSDK.run({
+        apiKey: PUBLIC_KEY,
+        assistant: ASSISTANT_ID,
+        config: {
+          position: "bottom-right",
+          offset: "40px",
+          width: "50px",
+          height: "50px",
+          idle: {
+            color: "transparent",
+            type: "round",
+            title: "",
+            subtitle: "",
+            icon: "",
+          },
+          loading: {
+            color: "transparent",
+            type: "round",
+            title: "",
+            subtitle: "",
+            icon: "",
+          },
+          active: {
+            color: "transparent",
+            type: "round",
+            title: "",
+            subtitle: "",
+            icon: "",
+          },
+        },
+      });
+
+      vapi.on("call-start", setActive);
+      vapi.on("call-end", setIdle);
+      vapi.on("error", setError);
+
+      setupButton();
+    };
+  })(document, "script");
+}
