@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
@@ -23,28 +23,39 @@
     <link rel="dns-prefetch" href="https://beta.ai.chatquartz.com" />
   </head>
   <body>
-    <!-- NAV -->
-    <nav class="nav">
-      <div class="nav__logo">
-        <img
-          src="cadence-logo.png"
-          alt="Cadence Education"
-          class="nav__logo-img"
-        />
+    <!-- UTILITY BAR -->
+    <div class="topbar">
+      <div class="topbar__inner">
+        <a class="topbar__link" href="#">Find Your School <span class="topbar__arrow" aria-hidden="true">›</span></a>
+        <a class="topbar__link" href="#">Site Search <span aria-hidden="true">⌕</span></a>
       </div>
-      <span class="nav__label">AI Support Center</span>
-    </nav>
+    </div>
 
-    <!-- BRAND STRIPE -->
-    <div class="brand-stripe"></div>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header__inner">
+        <a class="header__logo" href="#">
+          <img src="cadence-academy-logo.png" alt="Cadence Academy Preschool" />
+        </a>
+        <nav class="nav" aria-label="Main">
+          <a class="nav__link" href="#">Programs</a>
+          <a class="nav__link" href="#">Our Promise</a>
+          <a class="nav__link" href="#">Resources</a>
+          <a class="nav__link" href="#">Careers</a>
+          <a class="nav__link" href="#">Find a School</a>
+          <a class="nav__cta" href="#">Contact</a>
+        </nav>
+      </div>
+    </header>
 
     <!-- HERO -->
     <section class="hero">
-      <div class="hero__content">
+      <div class="hero__inner">
         <h1 class="hero__heading">How can we help you today?</h1>
-        <p class="hero__sub">
-          Connect with Cadence Education's AI-powered support — speak with our
-          AI assistant instantly, or use the chat button in the corner.
+        <p class="hero__sub">Prepare to Thrive</p>
+        <p class="hero__copy">
+          Speak with our AI assistant instantly, or use the chat button in the
+          corner.
         </p>
         <div class="hero__actions">
           <button id="call-btn" class="btn btn--primary">
@@ -59,11 +70,116 @@
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-      <span class="footer__copy"
-        >© Cadence Education. All Rights Reserved.</span
-      >
+
+    <!-- MISSION -->
+    <section class="mission">
+      <div class="shell">
+        <p class="mission__statement">
+          Cadence Education provides parents with peace of mind by giving
+          children an exceptional education every fun-filled day in a place as
+          nurturing as home.
+        </p>
+      </div>
+    </section>
+
+    <!-- PROGRAMS -->
+    <section class="programs">
+      <div class="shell">
+        <h2 class="section-title section-title--light">Our Programs</h2>
+        <p class="section-intro">
+          Our programs are tailored to each developmental stage and designed to
+          cultivate a love of learning. Dedicated teachers and curriculum work
+          in concert to stimulate cognitive, social, physical and emotional
+          growth.
+        </p>
+        <ul class="cards">
+          <li class="card"><a href="#"><img src="img/infant-care.jpg" alt="" loading="lazy" /><span>Infant Care</span></a></li>
+          <li class="card"><a href="#"><img src="img/toddler-care-1.jpg" alt="" loading="lazy" /><span>Toddler Care</span></a></li>
+          <li class="card"><a href="#"><img src="img/preschool.jpg" alt="" loading="lazy" /><span>Preschool</span></a></li>
+          <li class="card"><a href="#"><img src="img/pre-k-and-kindergarten-club.jpg" alt="" loading="lazy" /><span>Pre-K and Kindergarten Club</span></a></li>
+          <li class="card"><a href="#"><img src="img/private-kindergarten-2.jpg" alt="" loading="lazy" /><span>Private Kindergarten</span></a></li>
+          <li class="card"><a href="#"><img src="img/school-age-program-3.jpg" alt="" loading="lazy" /><span>School-Age Program</span></a></li>
+          <li class="card"><a href="#"><img src="img/Flexible-Care-Program-Square-Image.png" alt="" loading="lazy" /><span>Flexible Care</span></a></li>
+          <li class="card"><a href="#"><img src="img/summer-programs-1.jpg" alt="" loading="lazy" /><span>Summer Programs</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PROMISE -->
+    <section class="promise">
+      <div class="shell">
+        <h2 class="section-title">Our Promise</h2>
+        <div class="promise__grid">
+          <article class="promise__item">
+            <h3>Exceptional Education</h3>
+            <p>
+              Our skills-based curriculum is proven and prepares children for
+              Kindergarten and beyond. Two thirds of our students tested at an
+              advanced readiness level for Kindergarten.
+            </p>
+          </article>
+          <article class="promise__item">
+            <h3>Fun-Filled Days</h3>
+            <p>
+              Young children learn best when they're having fun. We believe each
+              child is unique and should be cared for, taught and supported to
+              thrive in his or her own way.
+            </p>
+          </article>
+          <article class="promise__item">
+            <h3>Nurturing Environment</h3>
+            <p>
+              Children flourish in environments where they feel comfortable. Our
+              homelike environments reduce tension and make it easier for
+              children to transition from home to school.
+            </p>
+          </article>
+          <article class="promise__item">
+            <h3>Open Communication</h3>
+            <p>
+              Children thrive when there's a strong partnership between school
+              and home. That's why our schools encourage open communication at
+              every step.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- THRIVE -->
+    <section class="thrive">
+      <div class="shell">
+        <h2 class="thrive__title">Preparing Your Child to <strong>THRIVE</strong></h2>
+        <p class="thrive__body">
+          Your child is unique, and we are happy to provide an educational, fun
+          and nurturing environment where each child can develop and thrive in
+          order to build a bright future with unlimited possibilities.
+        </p>
+      </div>
+    </section>
+
+    <!-- BLOG -->
+    <section class="blog">
+      <div class="shell">
+        <h2 class="section-title">Latest Blog Posts</h2>
+        <ul class="posts">
+          <li class="post"><a href="#"><h3>Webinar: Creative Ways to Encourage Children to Eat Healthy Foods</h3><span class="post__more">Read more</span></a></li>
+          <li class="post"><a href="#"><h3>Montessori vs. Traditional Preschool: 5 Key Differences</h3><span class="post__more">Read more</span></a></li>
+          <li class="post"><a href="#"><h3>Do Kids Have To Go To Preschool?</h3><span class="post__more">Read more</span></a></li>
+          <li class="post"><a href="#"><h3>The Nanny vs Daycare Decision: A Detailed Comparison</h3><span class="post__more">Read more</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SOCKET -->
+    <footer class="socket">
+      <div class="socket__inner">
+        <span>© Copyright – Cadence Education</span>
+        <span class="socket__sep" aria-hidden="true">|</span>
+        <span>8800 N Gainey Center Dr #300, Scottsdale, AZ 85258</span>
+        <span class="socket__sep" aria-hidden="true">|</span>
+        <span>480.607.7552</span>
+      </div>
     </footer>
 
     <script src="app.js"></script>

@@ -5,19 +5,55 @@ Cadence Education's brand.
 
 ## Brand reference
 
-Palette lifted from cadence-education.com (Enfold theme variables):
+The theme replicates cadence-education.com. Every value below was read from
+that site's computed styles rather than approximated by eye, so the two should
+line up when compared side by side.
 
-| Token | Hex | Use |
-| --- | --- | --- |
-| `--green` | `#006a39` | Primary / buttons |
-| `--green-dark` | `#004817` | Hero scrim, hover |
-| `--green-light` | `#028548` | Button hover, gradient |
-| `--navy` | `#293a8c` | Accent (logo birds) |
-| `--sky` | `#7bb0e7` | Accent (logo birds) |
-| `--leaf` | `#83a846` | Accent |
+| Element | Value |
+| --- | --- |
+| Utility bar | `#2b6a39`, 36px tall, white 14px/700 |
+| Header | White, sticky, logo 175x52 |
+| Nav links | Lato 13px/600, `#808080`, uppercase |
+| CONTACT button | `#1c2388`, white 16px/600, padding 16px 18px, radius 2px |
+| Hero headline | Lato 60px/800, line-height 72px, white |
+| Hero subtitle | 32px/500, white |
+| Content width | 1170px, giving a 135px inset at 1440px viewport |
+| Body | Lato, `#444444` |
+| Socket | `#006a39` with `#f3ffde` text |
 
-Typeface: **Lato** (same as the live site), loaded from Google Fonts.
-Logo: `cadence-logo.png`, taken from the live site's header.
+Assets taken from the live site: `cadence-academy-logo.png` (the header logo,
+"Cadence Academy Preschool") and `hero.jpg` (`MON_51277-Edited`, its hero
+photograph). Both are served locally rather than hot-linked.
+
+### Page sections
+
+The home page mirrors the reference's running order so it scrolls like the real
+site: hero → mission statement → Our Programs → Our Promise → Preparing Your
+Child to THRIVE → Latest Blog Posts → socket. Roughly three viewports tall.
+
+All copy is the client's own, taken from the live page — the mission statement,
+the four promise blocks, the THRIVE paragraph and the blog headlines. The eight
+programme cards use their real photographs, and the THRIVE band uses the
+theme's own `green-pattern.png`. Everything sits in `img/` (208 KB total) and is
+served locally rather than hot-linked.
+
+Links inside these sections are inert, as in the nav: this is a single-page
+demo, and the sections exist to make it feel like the real site while the call
+button stays the only working control.
+
+Two deliberate departures, both to serve content the reference page does not
+have:
+
+- **A left-weighted scrim over the hero.** The live site sets its headline
+  straight onto the photo, which works at 60px but not for our 17px body copy,
+  button and status line. The gradient clears by the right-hand third so the
+  photograph still reads.
+- **Navigation links are inert** (`href="#"`). This is a single-page demo, so
+  they carry the look without navigating away from it.
+
+`cadence-logo.png` (the older "Cadence Education" wordmark) is no longer
+referenced by any page, but is kept in case the Education branding is wanted
+back.
 
 ## How the voice agent works
 
@@ -81,7 +117,8 @@ The session is a stateless `<expiry>.<hmac(expiry)>` token in an
 `HttpOnly; Secure; SameSite=Lax` cookie (`cadence_session`), valid for one week.
 There is no session store. Changing `AUTH_SECRET` revokes every active session.
 
-`/login`, `/login.html`, `/style.css` and `/cadence-logo.png` are the only
+`/login`, `/login.html`, `/style.css`, `/cadence-academy-logo.png` and
+`/hero.jpg` are the only
 unauthenticated paths — exactly what the sign-in screen needs to render.
 `/logout` clears the cookie.
 

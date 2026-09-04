@@ -34,7 +34,8 @@ const PUBLIC = new Set([
   "/login",
   "/login.html",
   "/style.css",
-  "/cadence-logo.png",
+  "/cadence-academy-logo.png",
+  "/hero.jpg",
   "/favicon.ico",
 ]);
 
